@@ -61,4 +61,11 @@ class AuthController extends Controller{
             'user'=>$user
         ],200);
     }
+
+    public function getUsers(){
+        $users = User::latest()->get();
+        return response()->json([
+            'users'=>$users
+        ],200);
+    }
 }

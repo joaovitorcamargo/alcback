@@ -20,6 +20,6 @@ Route::post('auth/login',[AuthController::class, 'login'])->name('auth.login');
 Route::post('auth/register',[AuthController::class, 'register'])->name('auth.register');
 
 Route::middleware(['apiJwt'])->group(function () {
-    Route::get('users',[AuthController::class,'getUser']);
+    Route::get('getUsers',[AuthController::class,'getUsers']);
     Route::get('getAuthUser',[AuthController::class,'getUserAutenticated']);
 });
