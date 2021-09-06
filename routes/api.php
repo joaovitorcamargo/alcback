@@ -25,4 +25,9 @@ Route::middleware(['apiJwt'])->group(function () {
     Route::get('getUsers',[AuthController::class,'getUsers']);
     Route::get('getAuthUser',[AuthController::class,'getUserAutenticated']);
     Route::get('getUserById/{id}',[AuthController::class,'getUserById']);
+    Route::put('editTask', [AuthController::class,'editTask']);
+    Route::post('registerTask',[AuthController::class,'registerTask']);
+    Route::post('removeTask', [AuthController::class,'removeTask']);
+    Route::get('getTasks',[AuthController::class,'getTasks']);
+    Route::get('getTaskById/{id}',[AuthController::class,'getTaskById']);
 });

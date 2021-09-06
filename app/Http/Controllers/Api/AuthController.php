@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Mail\newMailAlc;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -96,6 +97,53 @@ class AuthController extends Controller{
         $user = User::find($request->id);
         Mail::send(new newMailAlc($user->name, $user->email, "Seu usuario foi removido no Alc Sistemas"));
         $user->delete();
+        return response()->json([
+            'msg'=>'Usuário removido com sucesso'
+        ],200);
+    }
+    
+    public function registerTask(Request $request){
+        $credentials = $request->only(['name', 'done_date', 'status']);
+        $task = Task::create([
+            'name'=>$credentials['name'],
+            'done_date'=>$credentials['done_date'],
+            'status'=>$credentials['status'],
+        ]);
+        $task->users()->attach(Auth::user()->id);
+        return response()->json([
+            'task' => $task,
+            'msg'=>"Task cadastrado com sucesso"
+        ],200);
+    }
+
+    public function getTasks(){
+        $tasks = Task::all();
+        return response()->json([
+            'tasks' => $tasks
+        ],200);
+    }
+
+    public function editTask(Request $request){
+        $task = Task::find($request->id);
+        $task->update([
+            'name'=> $request->name,
+            'due_date' => $request->due_date,
+            'statusn' => $request->status
+        ]);
+        return response()->json([
+            'msg'=>'Task editada com sucesso',
+        ],200);
+    }
+    public function getTaskById($id){
+        $task = Task::where('id', '=' , $id)->first();
+        return response()->json([
+            'task' => $task
+        ],200);
+    }
+    public function removeTask(Request $request){
+        $task = Task::find($request->id);
+        $task->users()->detach(Auth::user()->id);
+        $task->delete();
         return response()->json([
             'msg'=>'Usuário removido com sucesso'
         ],200);
